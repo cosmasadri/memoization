@@ -6,7 +6,7 @@
   "author": "Martin Bonetti <martin.bonetti@omicronenergy.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node memoizaton.js",
+    "start": "node memoization.js",
     "test": "mocha test.js"
   },
   "dependencies": {
