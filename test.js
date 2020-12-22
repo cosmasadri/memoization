@@ -1,4 +1,4 @@
-const memoization = require('./memoization');
+const memoize = require('./memoization').memoize;
 const expect = require('chai').expect;
 
 // hint: use https://sinonjs.org/releases/v6.1.5/fake-timers/ for faking timeouts
@@ -8,7 +8,7 @@ describe('memoization', function () {
         let returnValue = 5;
         const testFunction = (key) => returnValue;
 
-        const memoized = memoization.memoize(testFunction, (key) => key, 1000);
+        const memoized = memoize(testFunction, (key) => key, 1000);
         expect(memoized('c544d3ae-a72d-4755-8ce5-d25db415b776')).to.equal(5);
 
         returnValue = 10;

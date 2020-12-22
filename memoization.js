@@ -26,7 +26,7 @@
  * @param timeout   timeout for cached values in milliseconds
  */
 
-const memoize = (func, resolver, timeout) => {
+exports.memoize = (func, resolver, timeout) => {
   let cache = {}
 
   resolver = timeout == null ? undefined : resolver
@@ -35,7 +35,6 @@ const memoize = (func, resolver, timeout) => {
   return (...args) => {
     let cacheKey = resolver == null ? JSON.stringify(args) : resolver(...args)
 
-    console.log(cacheKey)
     let memoizedValue = cache[cacheKey]
 
     if (memoizedValue != null)
