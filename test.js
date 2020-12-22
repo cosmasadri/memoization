@@ -1,9 +1,21 @@
 const memoize = require('./memoization').memoize;
 const expect = require('chai').expect;
+const assert = require('chai').assert;
+const sinon = require('sinon');
 
 // hint: use https://sinonjs.org/releases/v6.1.5/fake-timers/ for faking timeouts
 
 describe('memoization', function () {
+    var clock;
+
+    beforeEach(function () {
+        clock = sinon.useFakeTimers(new Date(2021, 1, 1));
+    });
+
+    afterEach(function () {
+        clock.restore();
+    });
+
     it('should memoize function result', () => {
         let returnValue = 5;
         const testFunction = (key) => returnValue;
@@ -13,10 +25,29 @@ describe('memoization', function () {
 
         returnValue = 10;
 
-        // TODO currently fails, should work after implementing the memoize function, it should also work with other
-        // types then strings, if there are limitations to which types are possible please state them
         expect(memoized('c544d3ae-a72d-4755-8ce5-d25db415b776')).to.equal(5);
     });
 
-    // TODO additional tests required
+    it('should return a result even if resolver is not defined', () => {
+        let hitCount = 0;
+        const returnValue = 5;
+        const hitServer = (key) => {
+            hitCount += 1;
+            return returnValue;
+        };
+
+        // Function is not called yet
+        expect(hitCount).to.equal(0);
+
+        const memoized = memoize(hitServer, 1000);
+
+        // Function is called on the first time
+        expect(memoized('c544d3ae-a72d-4755-8ce5-d25db415b776')).to.equal(5);
+        expect(hitCount).to.equal(1);
+
+        // Expect to get the memoized result if the memoized called before timeout.
+        clock.tick(999);
+        expect(memoized('c544d3ae-a72d-4755-8ce5-d25db415b776')).to.equal(5);
+        expect(hitCount).to.equal(1);
+    });
 });
