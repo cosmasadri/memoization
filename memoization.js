@@ -29,10 +29,15 @@
 exports.memoize = (func, resolver, timeout) => {
   let cache = {}
 
-  resolver = timeout == null ? undefined : resolver
-  timeout = timeout == null ? resolver : timeout
+  // set timeout as the second argument if only two arguments provided, resolver ignored
+  if (timeout == null)
+  {
+    timeout = resolver
+    resolver = null
+  }
 
   return (...args) => {
+
     let cacheKey = resolver == null ? JSON.stringify(args) : resolver(...args)
 
     let memoizedValue = cache[cacheKey]
