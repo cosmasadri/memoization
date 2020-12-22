@@ -27,46 +27,26 @@
  */
 
 const memoize = (func, resolver, timeout) => {
-    let cache = {}
+  let cache = {}
 
-    resolver = timeout == null ? undefined : resolver
-    timeout = timeout == null ? resolver : timeout
+  resolver = timeout == null ? undefined : resolver
+  timeout = timeout == null ? resolver : timeout
 
-    return (...args) => {
-        let cacheKey = resolver == null ? JSON.stringify(args) : resolver(...args)
+  return (...args) => {
+    let cacheKey = resolver == null ? JSON.stringify(args) : resolver(...args)
 
-        console.log(cacheKey)
-        let memoizedValue = cache[cacheKey]
+    console.log(cacheKey)
+    let memoizedValue = cache[cacheKey]
 
-        if (memoizedValue != null)
-        {
-            return memoizedValue
-        } else
-        {
-            const result = func(...args)
-            cache[cacheKey] = result
-            setTimeout(() => { delete cache[cacheKey] }, timeout)
-            return result
-        }
+    if (memoizedValue != null)
+    {
+      return memoizedValue
+    } else
+    {
+      const result = func(...args)
+      cache[cacheKey] = result
+      setTimeout(() => { delete cache[cacheKey] }, timeout)
+      return result
     }
+  }
 }
-
-const sleep = ms => new Promise(resolve => {
-    setTimeout(() => { resolve() }, ms)
-})
-
-async function testFunc(testArg) {
-    console.log('start')
-    await sleep(5000)
-    console.log('done')
-
-    return testArg + 'TEST';
-}
-
-const memFunc = memoize(testFunc, (testArg) => testArg + 'HAHA', 100000);
-
-const testAsync = async () => {
-    console.log(await memFunc('asd'))
-    console.log(await memFunc('asd'))
-}
-testAsync()
