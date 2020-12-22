@@ -25,11 +25,48 @@
  *                  original function, the resolver function should provide the memoization key.
  * @param timeout   timeout for cached values in milliseconds
  */
-function memoize(func, resolver, timeout) {
-    // TODO implement the memoize function
-    return func;
+
+const memoize = (func, resolver, timeout) => {
+    let cache = {}
+
+    resolver = timeout == null ? undefined : resolver
+    timeout = timeout == null ? resolver : timeout
+
+    return (...args) => {
+        let cacheKey = resolver == null ? JSON.stringify(args) : resolver(...args)
+
+        console.log(cacheKey)
+        let memoizedValue = cache[cacheKey]
+
+        if (memoizedValue != null)
+        {
+            return memoizedValue
+        } else
+        {
+            const result = func(...args)
+            cache[cacheKey] = result
+            setTimeout(() => { delete cache[cacheKey] }, timeout)
+            return result
+        }
+    }
 }
 
-module.exports = {
-    memoize,
-};
+const sleep = ms => new Promise(resolve => {
+    setTimeout(() => { resolve() }, ms)
+})
+
+async function testFunc(testArg) {
+    console.log('start')
+    await sleep(5000)
+    console.log('done')
+
+    return testArg + 'TEST';
+}
+
+const memFunc = memoize(testFunc, (testArg) => testArg + 'HAHA', 100000);
+
+const testAsync = async () => {
+    console.log(await memFunc('asd'))
+    console.log(await memFunc('asd'))
+}
+testAsync()
