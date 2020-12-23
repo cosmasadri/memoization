@@ -127,13 +127,13 @@ describe('memoization', () => {
         it('should throw error if given arguments are less than two', () => {
 
             // call memoize without any argument
-            expect(function () { memoize() }).to.throw('memoize function should have at least two given arguments');
+            expect(() => { memoize() }).to.throw('memoize function should have at least two given arguments');
 
             const returnValue = 5;
             const testFunction = (key) => returnValue;
 
             // call memoize only with one argument
-            expect(function () { memoize(testFunction) }).to.throw('memoize function should have at least two given arguments');
+            expect(() => { memoize(testFunction) }).to.throw('memoize function should have at least two given arguments');
         });
 
         it('should throw error if given timeout argument is not a number', () => {
@@ -141,10 +141,10 @@ describe('memoization', () => {
             const testFunction = (key) => returnValue;
 
             // call memoize with timeout argument as string
-            expect(function () { memoize(testFunction, (key) => key, 'test') }).to.throw('timeout must be a number');
+            expect(() => { memoize(testFunction, (key) => key, 'test') }).to.throw('timeout must be a number');
 
             // call memoize without timeout argument
-            expect(function () { memoize(testFunction, (key) => key) }).to.throw('timeout must be a number');
+            expect(() => { memoize(testFunction, (key) => key) }).to.throw('timeout must be a number');
         });
 
         it('should throw error if given func argument is not a function', () => {
@@ -152,7 +152,7 @@ describe('memoization', () => {
             const testFunction = (key) => returnValue;
 
             // call memoize func argument as string
-            expect(function () { memoize('test', (key) => key, 1000) }).to.throw('func must be a function');
+            expect(() => { memoize('test', (key) => key, 1000) }).to.throw('func must be a function');
         });
 
         it('should throw error if given resolver argument is not a function', () => {
@@ -160,7 +160,7 @@ describe('memoization', () => {
             const testFunction = (key) => returnValue;
 
             // call memoize resolver argument as string
-            expect(function () { memoize(testFunction, 'test', 1000) }).to.throw('resolver must be a function');
+            expect(() => { memoize(testFunction, 'test', 1000) }).to.throw('resolver must be a function');
         });
     });
 });
