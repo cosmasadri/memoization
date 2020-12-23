@@ -1,4 +1,5 @@
-/**
+exports.memoize = (func, resolver, timeout) => {
+  /**
  * Creates a function that memoizes the result of func. If resolver is provided,
  * it determines the cache key for storing the result based on the arguments provided to the memorized function.
  * By default, the first argument provided to the memorized function is used as the map cache key. The memorized values
@@ -26,7 +27,6 @@
  * @param timeout   timeout for cached values in milliseconds
  */
 
-exports.memoize = (func, resolver, timeout) => {
   let cache = {}
 
   // set timeout as the second argument if only two arguments provided, resolver ignored
