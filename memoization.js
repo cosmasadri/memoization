@@ -27,30 +27,56 @@ exports.memoize = (func, resolver, timeout) => {
  * @param timeout   timeout for cached values in milliseconds
  */
 
-  let cache = {}
+  let cache = {};
 
-  // set timeout as the second argument if only two arguments provided, resolver ignored
   if (timeout == null)
   {
-    timeout = resolver
-    resolver = null
+    if (resolver == null)
+    {
+      throw new Error('memoize function should have at least two given arguments');
+    } else
+    {
+      // set timeout as the second argument if there are only two arguments provided, resolver ignored
+      timeout = resolver;
+      resolver = null;
+    }
+  }
+
+  // error handling on arguments type
+  if (typeof timeout != 'number')
+  {
+    throw new Error('timeout must be a number');
+  }
+
+  if (typeof func != 'function')
+  {
+    throw new Error('func must be a function');
+  }
+
+  if (resolver != null && typeof resolver != 'function')
+  {
+    throw new Error('resolver must be a function');
   }
 
   return (...args) => {
 
-    let cacheKey = resolver == null ? JSON.stringify(args) : resolver(...args)
+    // create cache key with resolver function if provided, otherwise stringify the args for the key
+    let cacheKey = resolver == null ? JSON.stringify(args) : resolver(...args);
 
-    let memoizedValue = cache[cacheKey]
+    let memoizedValue = cache[cacheKey];
 
+    // will return the memoized value if it exists, otherwise generate new and save it in cache
     if (memoizedValue != null)
     {
-      return memoizedValue
+      return memoizedValue;
     } else
     {
-      const result = func(...args)
-      cache[cacheKey] = result
-      setTimeout(() => { delete cache[cacheKey] }, timeout)
-      return result
+      const result = func(...args);
+      cache[cacheKey] = result;
+
+      // set timeout to delete cache key
+      setTimeout(() => { delete cache[cacheKey] }, timeout);
+      return result;
     }
   }
-}
+};
