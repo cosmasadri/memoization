@@ -27,12 +27,14 @@ exports.memoize = (func, resolver, timeout) => {
  * @param timeout   timeout for cached values in milliseconds
  */
 
+  // cache object to store the cached results
   let cache = {};
 
   if (timeout == null)
   {
     if (resolver == null)
     {
+      // if both timeout and resolver are null or undefined, throw error
       throw new Error('memoize function should have at least two given arguments');
     } else
     {
@@ -42,7 +44,7 @@ exports.memoize = (func, resolver, timeout) => {
     }
   }
 
-  // error handling on arguments type
+  // error handling on arguments (func, resolver, timeout) type
   if (typeof timeout != 'number')
   {
     throw new Error('timeout must be a number');
@@ -63,6 +65,7 @@ exports.memoize = (func, resolver, timeout) => {
     // create cache key with resolver function if provided, otherwise stringify the args for the key
     let cacheKey = resolver == null ? JSON.stringify(args) : resolver(...args);
 
+    // retrieving result from cache object
     let memoizedValue = cache[cacheKey];
 
     // will return the memoized value if it exists, otherwise generate new and save it in cache
