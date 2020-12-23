@@ -6,12 +6,15 @@
   "author": "Martin Bonetti <martin.bonetti@omicronenergy.com>",
   "license": "MIT",
   "scripts": {
-    "test": "nodemon --exec mocha test.js"
+    "test": "nodemon --exec nyc mocha test.js"
   },
   "dependencies": {
     "chai": "^4.1.2",
     "mocha": "^5.2.0",
     "nodemon": "^2.0.6",
     "sinon": "^6.1.5"
+  },
+  "devDependencies": {
+    "nyc": "^15.1.0"
   }
 }
