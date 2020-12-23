@@ -50,4 +50,50 @@ describe('memoization', function () {
         expect(memoized('c544d3ae-a72d-4755-8ce5-d25db415b776')).to.equal(5);
         expect(hitCount).to.equal(1);
     });
+
+    it('should retrieve result from memoized results if timeout is not exceeded (function should not be called)', () => {
+        let hitCount = 0;
+        const returnValue = 5;
+        const hitServer = (key) => {
+            hitCount += 1;
+            return returnValue;
+        };
+
+        const memoized = memoize(hitServer, (key) => key, 1000);
+
+        // Function is not called yet
+        expect(hitCount).to.equal(0);
+
+        // First function call
+        expect(memoized('c544d3ae-a72d-4755-8ce5-d25db415b776')).to.equal(5);
+        expect(hitCount).to.equal(1);
+
+        // Second function call. Below timeout time, function must be called one time only.
+        clock.tick(999);
+        expect(memoized('c544d3ae-a72d-4755-8ce5-d25db415b776')).to.equal(5);
+        expect(hitCount).to.equal(1);
+    });
+
+    it('should remove a memoized result if timeout is exceeded (function must be called again to get result)', () => {
+        let hitCount = 0;
+        const returnValue = 5;
+        const hitServer = (key) => {
+            hitCount += 1;
+            return returnValue;
+        };
+
+        const memoized = memoize(hitServer, (key) => key, 1000);
+
+        // Function is not called yet
+        expect(hitCount).to.equal(0);
+
+        // First function call
+        expect(memoized('c544d3ae-a72d-4755-8ce5-d25db415b776')).to.equal(5);
+        expect(hitCount).to.equal(1);
+
+        // Second function call. after timeout time, function must be called again.
+        clock.tick(1000);
+        expect(memoized('c544d3ae-a72d-4755-8ce5-d25db415b776')).to.equal(5);
+        expect(hitCount).to.equal(2);
+    });
 });
