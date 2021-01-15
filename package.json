@@ -6,7 +6,9 @@
   "author": "Martin Bonetti <martin.bonetti@omicronenergy.com>",
   "license": "MIT",
   "scripts": {
-    "test": "nodemon --exec nyc --reporter=html mocha test.js"
+    "test": "nyc mocha test.js",
+    "test:watch": "nodemon --exec nyc mocha test.js",
+    "test:coverage": "nyc --reporter=html mocha test.js"
   },
   "dependencies": {
     "chai": "^4.1.2",
