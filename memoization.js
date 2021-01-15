@@ -30,6 +30,9 @@ exports.memoize = (func, resolver, timeout) => {
   // cache object to store the cached results
   let cache = {};
 
+  // ++ swap parameter location of timeout and resolver; add optional to resolver
+  // ++ remove else
+
   if (timeout == null)
   {
     if (resolver == null)
@@ -67,6 +70,9 @@ exports.memoize = (func, resolver, timeout) => {
 
     // retrieving result from cache object
     let memoizedValue = cache[cacheKey];
+
+    // ++ no else required
+    // ++ condition should be !== undefined, null can be a value
 
     // will return the memoized value if it exists, otherwise generate new and save it in cache
     if (memoizedValue != null)
